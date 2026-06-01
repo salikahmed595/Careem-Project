@@ -47,7 +47,8 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_ANALYZE_URL: https://xtqyfyivoymjmyiixwmb.supabase.co/functions/v1/analyze
+          VITE_SUPABASE_URL: https://xtqyfyivoymjmyiixwmb.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_JcMaqw0zln1YHWPUWzbzHg_11b8z7Pm
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

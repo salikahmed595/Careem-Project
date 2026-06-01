@@ -1,10 +1,7 @@
 import { useState, useCallback } from "react";
 import { computeStats } from "../utils/statsEngine";
 import { buildPrompt } from "../utils/promptBuilder";
-
-const ANALYZE_URL =
-  import.meta.env.VITE_ANALYZE_URL ||
-  "http://localhost:54321/functions/v1/analyze";
+import { createClient } from "../utils/supabase/client";
 
 export function useAutoAnalyst() {
   const [status, setStatus] = useState("idle");
@@ -22,20 +19,13 @@ export function useAutoAnalyst() {
 
       const prompt = buildPrompt(computedStats, datasetName);
 
-      const response = await fetch(ANALYZE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+      const supabase = createClient();
+      const { data, error: fnError } = await supabase.functions.invoke("analyze", {
+        body: { prompt },
       });
 
-      if (!response.ok) {
-        const errBody = await response.json().catch(() => ({}));
-        throw new Error(
-          `Server error ${response.status}: ${errBody?.error || response.statusText}`
-        );
-      }
+      if (fnError) throw new Error(fnError.message);
 
-      const data = await response.json();
       const parsed = JSON.parse(data.text);
       setAiResult(parsed);
       setStatus("done");
