@@ -1,0 +1,20 @@
+{
+  "name": "Auto-Analyst — Instant Business Insights",
+  "short_name": "Auto-Analyst",
+  "description": "Upload any spreadsheet and get a complete business report in seconds. No analyst. No expertise. Free.",
+  "start_url": "/Careem-Project/",
+  "scope": "/Careem-Project/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/Careem-Project/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "en"
+}
