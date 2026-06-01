@@ -1,0 +1,20 @@
+{
+  "name": "Auto-Analyst — AI-Powered Data Insight Engine",
+  "short_name": "Auto-Analyst",
+  "description": "Upload any CSV and get instant AI-generated business insights — KPI cards, trend charts, findings, risk flags, and recommended actions. Powered by OpenAI.",
+  "start_url": "/Careem-Project/",
+  "scope": "/Careem-Project/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/Careem-Project/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "en"
+}

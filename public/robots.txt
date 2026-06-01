@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://salikahmed595.github.io/Careem-Project/sitemap.xml
