@@ -1,12 +1,10 @@
 # Local Setup — The Auto-Analyst
 
-This guide walks you through setting up The Auto-Analyst on your machine from scratch.
+This guide walks you through running the full stack (frontend + backend) on your machine.
 
 ---
 
 ## Prerequisites
-
-Before you start, make sure you have the following installed:
 
 | Tool | Minimum Version | How to Check |
 |---|---|---|
@@ -14,204 +12,141 @@ Before you start, make sure you have the following installed:
 | npm | 9.0.0 | `npm --version` |
 | Git | Any recent version | `git --version` |
 
-You also need an Anthropic API key. Get one at [console.anthropic.com](https://console.anthropic.com) under API Keys.
+You also need an OpenAI API key. Get one at platform.openai.com under API Keys.
 
 ---
 
-## Step 1 — Create the Project
-
-If you are starting from the Vite template:
+## Step 1 — Clone the Repository
 
 ```bash
-npm create vite@latest auto-analyst -- --template react
-cd auto-analyst
+git clone https://github.com/salikahmed595/Careem-Project.git
+cd Careem-Project
 ```
 
-If you are cloning an existing repository:
+---
+
+## Step 2 — Set Up the Backend
 
 ```bash
-git clone <your-repo-url>
-cd auto-analyst
+cd server
+npm install
 ```
 
----
-
-## Step 2 — Install Dependencies
+Create the backend environment file:
 
 ```bash
-npm install recharts papaparse lucide-react
-npm install -D tailwindcss postcss autoprefixer
+cp .env.example .env
 ```
 
-Then initialise Tailwind CSS:
+Open `server/.env` and add your OpenAI key:
+
+```
+OPENAI_API_KEY=sk-proj-your-key-here
+PORT=3000
+```
+
+Start the backend:
 
 ```bash
-npx tailwindcss init -p
+node index.js
 ```
+
+You should see:
+
+```
+Auto-Analyst API running on port 3000
+```
+
+Verify it works:
+
+```bash
+curl http://localhost:3000/health
+# Expected: {"status":"ok"}
+```
+
+Keep this terminal open.
 
 ---
 
-## Step 3 — Configure Tailwind CSS
+## Step 3 — Set Up the Frontend
 
-Open `tailwind.config.js` and set the content paths:
+Open a new terminal in the project root:
 
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
+```bash
+cd Careem-Project
+npm install
 ```
 
-Open `src/index.css` and replace its contents with:
+Create the frontend environment file:
 
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+```bash
+cp .env.example .env
 ```
 
----
+The default value (`VITE_API_URL=http://localhost:3000`) already points to your local backend. No changes needed.
 
-## Step 4 — Set Up Your API Key
-
-Create a `.env` file in the project root (next to `package.json`):
-
-```
-VITE_ANTHROPIC_API_KEY=sk-ant-your-key-here
-```
-
-Important notes:
-- Never commit this file to version control.
-- The `VITE_` prefix is required for Vite to expose the variable to the browser bundle.
-- If you are deploying, set this variable in your hosting provider's environment settings instead.
-
-Verify your `.gitignore` includes `.env`:
-
-```
-.env
-.env.local
-.env.*.local
-```
-
----
-
-## Step 5 — Add Project Files
-
-Copy all source files from the project specification into the `src/` directory. The expected structure is:
-
-```
-auto-analyst/
-├── .env
-├── package.json
-├── vite.config.js
-├── tailwind.config.js
-├── postcss.config.js
-├── index.html
-└── src/
-    ├── main.jsx
-    ├── index.css
-    ├── App.jsx
-    ├── components/
-    │   ├── DataUploader.jsx
-    │   ├── KPICards.jsx
-    │   ├── TrendChart.jsx
-    │   ├── InsightPanel.jsx
-    │   └── LoadingState.jsx
-    ├── hooks/
-    │   └── useAutoAnalyst.js
-    ├── utils/
-    │   ├── csvParser.js
-    │   ├── statsEngine.js
-    │   └── promptBuilder.js
-    └── data/
-        └── demo_ecommerce.js
-```
-
----
-
-## Step 6 — Update the API Hook
-
-In `src/hooks/useAutoAnalyst.js`, update the fetch call to read the API key from the environment variable:
-
-```js
-const response = await fetch("https://api.anthropic.com/v1/messages", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
-    "anthropic-version": "2023-06-01",
-    "anthropic-dangerous-direct-browser-access": "true"
-  },
-  body: JSON.stringify({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 1000,
-    messages: [{ role: "user", content: prompt }]
-  })
-});
-```
-
-The `anthropic-dangerous-direct-browser-access` header is required when calling the Anthropic API directly from a browser. In production, route API calls through your own backend to keep the key private.
-
----
-
-## Step 7 — Run the Development Server
+Start the frontend:
 
 ```bash
 npm run dev
 ```
 
-Vite will start a local server. Open the URL shown in the terminal — typically `http://localhost:5173`.
+Open `http://localhost:5173` in your browser.
 
 ---
 
-## Verifying the Setup
+## Step 4 — Test the Full Flow
 
-Once the server is running:
+1. Click "Try Demo Data" in the browser.
+2. KPI cards and the chart appear immediately (no network request yet).
+3. After a few seconds, the AI insight panel appears — this confirms the frontend reached the backend, and the backend reached OpenAI successfully.
 
-1. Open the app in your browser.
-2. Click "Try Demo Data" — this does not require an API key call and should render KPI cards and a chart immediately.
-3. Wait for the AI analysis to complete. If the API key is correct, the insight panel will appear within a few seconds.
-4. If you see an "Analysis failed" error, check the browser console for details and verify your API key in `.env`.
+If the insight panel does not appear, open the browser console and the backend terminal for error details.
 
 ---
 
 ## Common Issues
 
-### "Module not found" errors
+### Backend: "OPENAI_API_KEY is not configured"
 
-Run `npm install` again. If the issue persists, delete `node_modules` and `package-lock.json`, then run `npm install` again.
+The `server/.env` file is missing or the key name is wrong. The variable must be exactly `OPENAI_API_KEY`.
+
+### Backend: 401 from OpenAI
+
+Your API key is invalid or has been revoked. Generate a new key at platform.openai.com.
+
+### Frontend: "Failed to fetch" or CORS error
+
+The backend is not running. Start it with `node index.js` from the `server/` directory.
+
+### Frontend: Tailwind styles not applying
+
+Run `npm install` again in the project root. If the issue persists, delete `node_modules` and reinstall:
 
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-### Tailwind classes not applying
+### Module not found errors in the backend
 
-Check that `tailwind.config.js` has the correct `content` paths and that `src/index.css` has the three `@tailwind` directives. Restart the dev server after making changes to the Tailwind config.
-
-### API returns 401 Unauthorized
-
-Your API key is missing or incorrect. Open `.env`, confirm the key starts with `sk-ant-`, and make sure there are no extra spaces or quotes around the value.
-
-### API returns 400 Bad Request
-
-The request headers may be missing. Confirm that `anthropic-version` and `anthropic-dangerous-direct-browser-access` headers are included in the fetch call (see Step 6).
-
-### CORS errors in the browser console
-
-Direct browser calls to the Anthropic API require the `anthropic-dangerous-direct-browser-access` header. Add it to the request headers as shown in Step 6.
+Run `npm install` from inside the `server/` directory (not the root).
 
 ---
 
 ## Available Scripts
 
+### Frontend (run from project root)
+
 | Command | Description |
 |---|---|
-| `npm run dev` | Start the local development server with hot reload |
-| `npm run build` | Compile and bundle for production (outputs to `dist/`) |
-| `npm run preview` | Serve the production build locally to verify it before deployment |
+| `npm run dev` | Start local dev server at localhost:5173 |
+| `npm run build` | Build for production (outputs to `dist/`) |
+| `npm run preview` | Serve the production build locally at localhost:4173 |
+
+### Backend (run from `server/`)
+
+| Command | Description |
+|---|---|
+| `node index.js` | Start the API server |
+| `node --watch index.js` | Start with auto-restart on file changes |
