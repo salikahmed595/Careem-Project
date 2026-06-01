@@ -3,7 +3,7 @@ import {
   BrainCircuit, Upload, Play, TrendingUp, TrendingDown,
   BarChart3, Lightbulb, Zap, Shield, ArrowRight,
   CheckCircle, AlertTriangle, Activity, FileText,
-  ChevronDown, Lock, Eye, Cpu,
+  ChevronDown, Lock, Eye, Star,
 } from "lucide-react";
 import { parseCSV } from "../utils/csvParser";
 import { DEMO_DATA, DEMO_META } from "../data/demo_ecommerce";
@@ -257,7 +257,7 @@ function StickyBar({ visible, onDemo, onUpload }) {
         <div className="max-w-7xl mx-auto flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-2 flex-1">
             <BrainCircuit size={16} className="text-indigo-400" />
-            <p className="text-white text-sm font-medium">Auto-Analyst — upload any CSV, get AI insights instantly</p>
+            <p className="text-white text-sm font-medium">Auto-Analyst — upload any spreadsheet, get a full business report instantly</p>
           </div>
           <div className="flex gap-2 ml-auto">
             <button
@@ -374,7 +374,7 @@ export default function LandingPage({ onData }) {
                 <span className="animate-ping absolute h-full w-full rounded-full bg-indigo-400 opacity-75" />
                 <span className="relative h-2 w-2 rounded-full bg-indigo-400" />
               </span>
-              Powered by OpenAI GPT-4o
+              Instant Business Intelligence — No Expertise Needed
             </div>
 
             {/* Headline with typewriter */}
@@ -391,7 +391,7 @@ export default function LandingPage({ onData }) {
 
             {/* Sub */}
             <p className="animate-slide-up-2 text-slate-400 text-lg leading-relaxed mb-10 max-w-[480px]">
-              Drop any CSV and Auto-Analyst writes a complete business report — KPI cards, trend chart, key findings, risk flags, and recommended actions — all AI-generated in seconds. No setup. No login.
+              Drop any spreadsheet and get a complete business report in seconds — key metrics, trend charts, hidden risks, and exactly what to do next. No analyst, no expertise, no waiting. Just answers.
             </p>
 
             {/* CTAs — directional */}
@@ -437,11 +437,11 @@ export default function LandingPage({ onData }) {
               ))}
             </div>
 
-            {/* Built-with strip */}
-            <div className="animate-fade-in flex items-center gap-3 pt-5 border-t border-white/5">
-              <span className="text-slate-600 text-xs">Built with</span>
-              {["OpenAI","React","Supabase","Vite"].map((t) => (
-                <span key={t} className="px-2.5 py-1 bg-slate-800/80 border border-slate-700/50 rounded-lg text-slate-400 text-xs">
+            {/* Guarantee strip */}
+            <div className="animate-fade-in flex flex-wrap items-center gap-3 pt-5 border-t border-white/5">
+              {["100% Free","Zero Setup","Your Data Stays Private","Works on Any Device"].map((t) => (
+                <span key={t} className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-800/80 border border-slate-700/50 rounded-lg text-slate-400 text-xs">
+                  <CheckCircle size={10} className="text-emerald-500" />
                   {t}
                 </span>
               ))}
@@ -537,10 +537,10 @@ export default function LandingPage({ onData }) {
           <p className="text-center text-slate-500 text-xs uppercase tracking-widest mb-10">Why you can trust it</p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Lock,   title: "Data never leaves your browser", sub: "Only anonymous statistics go to the AI — your raw rows stay on your machine." },
-              { icon: Shield, title: "No account, no tracking",        sub: "Nothing is stored. Refresh the page and everything is gone."                  },
-              { icon: Eye,    title: "Fully open source",              sub: "The full source code is public on GitHub. Nothing hidden, nothing shady."      },
-              { icon: Cpu,    title: "OpenAI GPT-4o inside",           sub: "The same model trusted by millions of professionals — running your report."    },
+              { icon: Lock,   title: "Your raw data never leaves your device",  sub: "Only anonymous number summaries are processed. Your actual rows never move." },
+              { icon: Shield, title: "No account. No tracking. Ever.",           sub: "Nothing is stored anywhere. Close the tab and every trace is gone instantly."  },
+              { icon: Eye,    title: "Complete transparency",                    sub: "Every finding is backed by real numbers from your data — never guessed."       },
+              { icon: Star,   title: "The same analysis experts charge for",     sub: "What used to take analysts hours now happens in under 10 seconds, for free."   },
             ].map(({ icon: Icon, title, sub }) => (
               <div key={title} className="glass border border-slate-700/50 rounded-2xl p-5">
                 <div className="w-10 h-10 rounded-xl bg-indigo-600/15 border border-indigo-500/20 flex items-center justify-center mb-4">
@@ -567,7 +567,7 @@ export default function LandingPage({ onData }) {
           <div className="hidden md:block absolute top-8 left-[calc(33%-24px)] right-[calc(33%-24px)] h-px bg-gradient-to-r from-indigo-500/40 via-violet-500/60 to-indigo-500/40" />
 
           <Step number={1} icon={Upload}       title="Upload your data"   description='Click "Try Demo — Free" to load sample data instantly, or click "Upload Your CSV" to use your own file.' />
-          <Step number={2} icon={BrainCircuit}  title="AI reads it"        description="Your statistics are computed in your browser, then a structured summary is sent to OpenAI for analysis." />
+          <Step number={2} icon={BrainCircuit}  title="The engine reads it" description="Your numbers are analysed instantly for trends, patterns, and anything unusual — all on your device first." />
           <Step number={3} icon={FileText}      title="Read your report"   description="A full business report appears: KPI cards, trend chart, findings, recommended actions, risk flags, and a health score." />
         </div>
 
@@ -592,8 +592,7 @@ export default function LandingPage({ onData }) {
           <p className="text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-3">What You Get</p>
           <h2 className="text-3xl font-bold text-white mb-3">A full analyst report. In seconds.</h2>
           <p className="text-slate-400 max-w-lg mx-auto">
-            Everything a senior business analyst would write — done by AI the moment you upload.
-            Hover over each card to interact.
+            Everything a senior business analyst would write, delivered the moment you upload. Hover any card to explore.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -1,7 +1,7 @@
 {
-  "name": "Auto-Analyst — AI-Powered Data Insight Engine",
+  "name": "Auto-Analyst — Instant Business Insights",
   "short_name": "Auto-Analyst",
-  "description": "Upload any CSV and get instant AI-generated business insights — KPI cards, trend charts, findings, risk flags, and recommended actions. Powered by OpenAI.",
+  "description": "Upload any spreadsheet and get a complete business report in seconds. No analyst. No expertise. Free.",
   "start_url": "/Careem-Project/",
   "scope": "/Careem-Project/",
   "display": "standalone",
