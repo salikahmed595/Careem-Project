@@ -10,11 +10,10 @@ Live: [salikahmed595.github.io/Careem-Project](https://salikahmed595.github.io/C
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 18, Vite, Tailwind CSS |
-| Backend | Node.js, Express (deployed on Render) |
+| Frontend | React 18, Vite, Tailwind CSS — hosted on GitHub Pages |
+| Backend | Supabase Edge Function (Deno) — hosted on Supabase |
 | AI | OpenAI gpt-4o-mini |
-| Frontend hosting | GitHub Pages |
-| Backend hosting | Render |
+| CI/CD | GitHub Actions — auto-deploys both on push to main |
 
 ---
 
@@ -22,28 +21,33 @@ Live: [salikahmed595.github.io/Careem-Project](https://salikahmed595.github.io/C
 
 1. Upload a CSV or click "Try Demo Data"
 2. The app computes statistics in the browser (totals, averages, trends, anomalies)
-3. Those stats are sent to the Render backend
-4. The backend calls OpenAI with the statistics as a structured prompt
+3. Those stats are sent to the Supabase Edge Function
+4. The Edge Function calls OpenAI with a structured prompt
 5. OpenAI returns a JSON insight report
 6. The frontend renders KPI cards, a trend chart, and a written analysis
 
-The OpenAI API key lives only on the Render server — never in the browser.
+The OpenAI API key lives only in Supabase — never in the browser bundle.
 
 ---
 
 ## Local Development
 
 ```bash
-# 1. Set up backend
-cd server
+# 1. Install frontend dependencies
 npm install
-cp .env.example .env       # add your OPENAI_API_KEY
-node index.js              # runs on localhost:3000
+cp .env.example .env
 
-# 2. Set up frontend (new terminal, from project root)
-npm install
-cp .env.example .env       # VITE_API_URL=http://localhost:3000 (already set)
-npm run dev                # runs on localhost:5173
+# 2. Start local Supabase (requires Docker)
+npx supabase start
+
+# 3. Set OpenAI key for local function
+npx supabase secrets set --env-file supabase/functions/analyze/.env.local
+
+# 4. Serve the Edge Function locally
+npx supabase functions serve analyze --no-verify-jwt
+
+# 5. Start the frontend (new terminal)
+npm run dev
 ```
 
 Full setup details: [local.md](local.md)
@@ -52,12 +56,16 @@ Full setup details: [local.md](local.md)
 
 ## Deployment
 
-Two services:
+Push to `main`. GitHub Actions automatically:
+1. Deploys the Supabase Edge Function
+2. Builds the React app with the production function URL
+3. Publishes the build to GitHub Pages
 
-1. **Render** — deploy the `server/` directory as a Node.js web service. Add `OPENAI_API_KEY` in environment variables.
-2. **GitHub Pages** — push to `main`. GitHub Actions builds and deploys automatically. Add `VITE_API_URL` (your Render URL) as a repository secret.
+**One-time setup required:**
 
-Full deployment guide: [deployment.md](deployment.md)
+Add `SUPABASE_ACCESS_TOKEN` as a GitHub Actions secret (get it from supabase.com/dashboard/account/tokens).
+
+Full guide: [deployment.md](deployment.md)
 
 ---
 
@@ -69,5 +77,5 @@ Full deployment guide: [deployment.md](deployment.md)
 | [local.md](local.md) | Full local development setup |
 | [instruction.md](instruction.md) | How to use the application |
 | [architecture.md](architecture.md) | System design and data flow |
-| [api.md](api.md) | Backend and OpenAI API reference |
-| [deployment.md](deployment.md) | Step-by-step deployment to Render and GitHub Pages |
+| [api.md](api.md) | Edge Function and OpenAI API reference |
+| [deployment.md](deployment.md) | Step-by-step deployment guide |

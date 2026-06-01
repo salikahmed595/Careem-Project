@@ -2,7 +2,9 @@ import { useState, useCallback } from "react";
 import { computeStats } from "../utils/statsEngine";
 import { buildPrompt } from "../utils/promptBuilder";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const ANALYZE_URL =
+  import.meta.env.VITE_ANALYZE_URL ||
+  "http://localhost:54321/functions/v1/analyze";
 
 export function useAutoAnalyst() {
   const [status, setStatus] = useState("idle");
@@ -20,7 +22,7 @@ export function useAutoAnalyst() {
 
       const prompt = buildPrompt(computedStats, datasetName);
 
-      const response = await fetch(`${API_URL}/api/analyze`, {
+      const response = await fetch(ANALYZE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
@@ -28,7 +30,9 @@ export function useAutoAnalyst() {
 
       if (!response.ok) {
         const errBody = await response.json().catch(() => ({}));
-        throw new Error(`Server error ${response.status}: ${errBody?.error || response.statusText}`);
+        throw new Error(
+          `Server error ${response.status}: ${errBody?.error || response.statusText}`
+        );
       }
 
       const data = await response.json();
